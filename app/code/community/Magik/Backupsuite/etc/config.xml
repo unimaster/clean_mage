@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Magik_Backupsuite>
+      <version>0.2.0</version>
+    </Magik_Backupsuite>
+  </modules>
+  
+   <admin>
+	<routers>
+	 <adminhtml>
+				<args>
+					<modules>
+						<backupsuite before="Mage_Adminhtml">Magik_Backupsuite_Adminhtml</backupsuite>
+					</modules>
+				</args>
+			</adminhtml>
+	</routers>
+  </admin>
+  <adminhtml>
+	<menu>
+	  <backupsuite module="backupsuite">
+		<title>Cloud Backup</title>
+		<sort_order>100</sort_order>
+		<children>
+		  <backupsuiteprofile module="backupsuite">
+		    <title>Manage Profile</title>
+			<sort_order>1</sort_order>
+			<action>adminhtml/backupsuite_backupsuiteprofile</action>
+		  </backupsuiteprofile>
+		  <backupsuite module="backupsuite">
+		    <title>Manage Backup</title>
+			<sort_order>3</sort_order>
+			<action>adminhtml/backupsuite_backupsuite</action>
+		  </backupsuite>
+		</children>
+	  </backupsuite>
+	</menu>
+	<acl>
+	  <resources>
+		<all>
+		  <title>Allow Everything</title>
+		</all>
+		<admin>
+		  <children>
+			<backupsuite translate="title" module="backupsuite">
+			  <title>Cloud Backup</title>
+			  <sort_order>1000</sort_order>
+			  <children>
+			    <backupsuiteprofile translate="title">
+				  <title>Manage Profile</title>
+				  <sort_order>1</sort_order>
+			    </backupsuiteprofile>
+			   <backupsuite translate="title">
+				    <title>Manage Backup</title>
+				    <sort_order>3</sort_order>
+			      </backupsuite>
+			  </children>
+			</backupsuite>
+		  </children>
+		</admin>
+	  </resources>
+	</acl>
+	<layout>
+	  <updates>
+		<backupsuite>
+		  <file>backupsuite.xml</file>
+		</backupsuite>
+	  </updates>
+	</layout>
+  </adminhtml>
+  
+  <global>
+   <helpers>
+      <backupsuite>
+        <class>Magik_Backupsuite_Helper</class>
+      </backupsuite>
+    </helpers>
+	<models>
+	  <backupsuite>
+		<class>Magik_Backupsuite_Model</class>
+		<resourceModel>backupsuite_mysql4</resourceModel>
+	  </backupsuite>
+	  <backupsuite_mysql4>
+		<class>Magik_Backupsuite_Model_Mysql4</class>
+		<entities>		  
+			  <backupsuite>
+				<table>backupsuite</table>
+			  </backupsuite>
+			  <backupsuiteprofile>
+				<table>backupsuiteprofile</table>
+			  </backupsuiteprofile>		  
+			 
+        </entities>
+	  </backupsuite_mysql4>
+	</models>
+	<resources>
+	  <backupsuite_setup>
+		<setup>
+		  <module>Magik_Backupsuite</module>
+		</setup>
+		<connection>
+		  <use>core_setup</use>
+		</connection>
+	  </backupsuite_setup>
+	  <backupsuite_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	  </backupsuite_write>
+	  <backupsuite_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </backupsuite_read>
+	</resources>
+	<blocks>
+      <backupsuite>
+        <class>Magik_Backupsuite_Block</class>
+      </backupsuite>
+    </blocks>
+    <template>
+        <email>
+            <magik_backupsuite_config_general_settings_mgktemplate  translate="label" module="backupsuite">
+                <label>Backupsuite Cron Success Email</label>
+                <file>backupsuite_success_email.html</file>
+                <type>html</type>
+            </magik_backupsuite_config_general_settings_mgktemplate>
+           <magik_backupsuite_config_general_settings_mgkfailtemplate  translate="label" module="backupsuite">
+                <label>Backupsuite Cron Error Email</label>
+                <file>backupsuite_failure_email.html</file>
+                <type>html</type>
+            </magik_backupsuite_config_general_settings_mgkfailtemplate>
+            <magik_backupsuite_config_general_settings_deletesuccess  translate="label" module="backupsuite">
+                <label>Backupsuite Delete Success Email</label>
+                <file>backupsuite_delete_success.html</file>
+                <type>html</type>
+            </magik_backupsuite_config_general_settings_deletesuccess>
+            <magik_backupsuite_config_general_settings_deleteerror  translate="label" module="backupsuite">
+                <label>Backupsuite Delete Error Email</label>
+                <file>backupsuite_delete_error.html</file>
+                <type>html</type>
+            </magik_backupsuite_config_general_settings_deleteerror>
+        </email>
+    </template>
+  </global>
+  <crontab>
+   <jobs>
+    
+     <profileschedule>
+      <schedule><cron_expr>*/25 * * * *</cron_expr></schedule>
+	<run><model>backupsuite/cron::profileschedule</model></run>
+     </profileschedule>
+     <mgkbackupsuite>
+	<run><model>backupsuite/observer::execbackup</model></run>
+     </mgkbackupsuite>
+     
+   </jobs>
+  </crontab>
+  
+  
+  <default>
+    <magik_backups_config>
+      <ftp_setting>
+        <ftp_server_enable>0</ftp_server_enable>
+      </ftp_setting>
+      <general_settings>
+        <delete_older_than>30</delete_older_than>
+      </general_settings>
+      <dropbox_settings>
+        <dropbox_enable>0</dropbox_enable>
+      </dropbox_settings>  
+    </magik_backups_config>
+    <settings>
+        <dropboxappkey>w7lj74txwt9wa8t</dropboxappkey>
+        <dropboxappsecret>07tli288slqk0m1</dropboxappsecret>
+        <dropboxappaccess>app_folder</dropboxappaccess>     
+
+        <boxnetappkey>foaw8jz172e7b1ah15utd77ably9eiy1</boxnetappkey>
+        <boxnetsecret>tv2FxX6XeglOV9o3yM42XOwRWrjFdzqO</boxnetsecret>
+
+        <gdriveappkey>835378719509.apps.googleusercontent.com</gdriveappkey>
+        <gdrivesecret>N_IZQlM8wF2N5d2r8ITOIx3K</gdrivesecret>
+        <gdriveredirect>urn:ietf:wg:oauth:2.0:oob</gdriveredirect>         
+    </settings>
+    <magik_backupsuite>
+	<config_general>
+	<mgkfailtemplate>magik_backupsuite_config_general_settings_mgkfailtemplate</mgkfailtemplate>
+	    <mgktemplate>magik_backupsuite_config_general_settings_mgktemplate</mgktemplate>
+	</config_general>
+    </magik_backupsuite>
+  </default>
+</config> 

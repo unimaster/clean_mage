@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+  <adminhtml_backupsuite_backupsuite_index>
+	<reference name="content">
+	  <block type="backupsuite/adminhtml_backupsuite" name="backupsuite" />
+	</reference>
+  </adminhtml_backupsuite_backupsuite_index>
+  <adminhtml_backupsuite_backupsuiteprofile_index>
+	<reference name="content">
+	  <block type="backupsuite/adminhtml_backupsuiteprofile" name="backupsuiteprofile" />
+	</reference>
+  </adminhtml_backupsuite_backupsuiteprofile_index>
+  <default> 
+    <reference name="head">
+	
+	 <action method="addCss"><styles>backupsuite.css</styles></action>
+    </reference> 
+  </default>
+</layout>
