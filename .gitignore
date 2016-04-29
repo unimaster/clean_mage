@@ -1,0 +1,15 @@
+.buildpath
+.project
+.settings/*
+.idea
+/.modman
+var/ait_install/*
+var/ait_rewrite/*
+var/cache/*
+var/locks/*
+var/log/*
+var/report/*
+var/session/*
+var/resource_config.json
+var/*
+media/*
